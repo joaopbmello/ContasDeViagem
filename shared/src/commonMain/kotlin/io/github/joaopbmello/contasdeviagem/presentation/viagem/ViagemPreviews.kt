@@ -1,13 +1,12 @@
-package io.github.joaopbmello.contasdeviagem
+package io.github.joaopbmello.contasdeviagem.presentation.viagem
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import io.github.joaopbmello.contasdeviagem.domain.Despesa
 import io.github.joaopbmello.contasdeviagem.domain.TipoComprovante
-import io.github.joaopbmello.contasdeviagem.presentation.viagem.ViagemScreen
 
-
-private val despesasProvisorias =
+private val despesasDeExemplo =
     listOf(
         Despesa(
             id = "1",
@@ -35,13 +34,28 @@ private val despesasProvisorias =
         ),
     )
 
+@Preview
 @Composable
-fun App() {
+private fun ViagemScreenComDespesasPreview() {
     MaterialTheme {
         ViagemScreen(
             titulo = "Interior do Ceará",
             periodo = "18/08 a 20/08",
-            despesas = despesasProvisorias,
+            despesas = despesasDeExemplo,
+            onDespesaClick = {},
+            onLancarDespesa = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ViagemScreenVaziaPreview() {
+    MaterialTheme {
+        ViagemScreen(
+            titulo = "Interior do Ceará",
+            periodo = "18/08 a 20/08",
+            despesas = emptyList(),
             onDespesaClick = {},
             onLancarDespesa = {},
         )
