@@ -38,6 +38,13 @@ Nosso produto totaliza sozinho e gera a prestação de contas pronta, no mesmo f
 
 ---
 
+## 3. Backlog inicial
+
+O backlog está no quadro do GitHub Projects deste repositório:
+https://github.com/users/joaopbmello/projects/2/views/1
+
+---
+
 ## 4. Plataforma-alvo
 
 **Escolha: Android.**
@@ -67,3 +74,19 @@ Além disso, uma despeza pode ser inserida sem sinal e subida depois, o que exig
 **API própria de Web II:** Exige cursar DIM0547, o que não é o caso neste semestre.
 
 **Local com APIs públicas.** Removeria a sincronização e a conta de usuário, que são esseiciais em caso de perda do aparelho. Além disso, não existe serviço externo de prestação de contas de viagem a consumir.
+
+---
+
+## 6. Equipe
+
+| Nome | Matrícula | Papel |
+| --- | --- | --- |
+| João Mello | 20250050643 | Desenvolvimento integral (equipe de um integrante) |
+
+---
+
+## 7. Coorte de apresentação e integração com outra disciplina
+
+**Coorte B**, apresentações online.
+
+Não há integração com outra disciplina neste semestre.
