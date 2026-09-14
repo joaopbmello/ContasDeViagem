@@ -6,7 +6,6 @@ import io.github.joaopbmello.contasdeviagem.domain.Despesa
 import io.github.joaopbmello.contasdeviagem.domain.TipoComprovante
 import io.github.joaopbmello.contasdeviagem.presentation.viagem.ViagemScreen
 
-
 private val despesasProvisorias =
     listOf(
         Despesa(
