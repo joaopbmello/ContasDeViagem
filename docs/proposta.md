@@ -6,6 +6,8 @@
 
 **Repositório:** https://github.com/joaopbmello/ContasDeViagem
 
+**Vídeo da Sprint 0:** https://drive.google.com/file/d/1n7WC4DXrIGBSrXHMZNYD5Gspc28wOtb7/view
+
 ---
 
 ## 1. Visão do produto
@@ -47,13 +49,13 @@ https://github.com/users/joaopbmello/projects/2/views/1
 
 ## 4. Plataforma-alvo
 
-**Escolha: Android.**
+Escolha: **Android**.
 
 O produto é usado em campo, durante deslocamentos rodoviários pelo interior do nordeste, no momento em que a despesa acontece. Seja no posto, no restaurante, no hotel. O aparelho é o celular que o vendedor já carrega, e nenhuma etapa do fluxo acontece em um computador.
 
 O vendedor com quem o produto será validado usa Android. Além disso, o Android responde por mais de 80% do mercado de sistemas móveis no Brasil, com concentração ainda maior nas faixas de aparelho mais acessíveis, típicas do público de vendedores externos.
 
-**Alternativa descartada: iOS.**
+Alternativa descartada: **iOS**.
 
 Minoritário no público-alvo brasileiro e ausente entre os usuários com quem o produto será validado. Escolher iOS otimizaria para um perfil de usuário que não é o do produto.
  
@@ -61,19 +63,19 @@ Minoritário no público-alvo brasileiro e ausente entre os usuários com quem o
 
 ## 5. Estratégia de backend
 
-**Escolha: Supabase.**
+Escolha: **Supabase**.
 
-Hoje o registro das despesas existe num único caderno de papel; no aplicativo, existiria num único aparelho. Perder, quebrar ou trocar o celular durante uma viagem significaria perder a prestação de contas inteira — ou seja, dinheiro que o vendedor adiantou e não conseguiria comprovar. A conta existe para que o histórico não dependa do aparelho.
+Hoje o registro das despesas existe num único caderno de papel; no aplicativo, existiria num único aparelho. Perder, quebrar ou trocar o celular durante uma viagem significaria perder a prestação de contas inteira. Ou seja, dinheiro que o vendedor adiantou e não conseguiria comprovar. A conta existe para que o histórico não dependa do aparelho.
 
 Além disso, uma despeza pode ser inserida sem sinal e subida depois, o que exige um servidor capaz de receber escritas fora de ordem e resolver conflitos de forma previsível. O domínio é relacional e pequeno: uma viagem tem muitas despesas, e as consultas que importam são por viagem e por período, com totalização. O PostgreSQL do Supabase modela isso diretamente, com integridade referencial e soma no banco, e resolve autenticação e armazenamento de arquivos no mesmo serviço.
 
-**Alternativas descartadas.**
+Alternativas descartadas:
 
 **Firebase:** Atende autenticação e armazenamento de arquivos, mas o Firestore é orientado a documentos e restringe as consultas ao seu próprio modelo. Um domínio que é relacional por natureza exigiria desnormalizar os dados e manter totais duplicados à mão, aumentando a chance de o total exibido divergir da soma das despesas.
 
 **API própria de Web II:** Exige cursar DIM0547, o que não é o caso neste semestre.
 
-**Local com APIs públicas.** Removeria a sincronização e a conta de usuário, que são esseiciais em caso de perda do aparelho. Além disso, não existe serviço externo de prestação de contas de viagem a consumir.
+**Local com APIs públicas.** Removeria a sincronização e a conta de usuário, que são essenciais em caso de perda do aparelho. Além disso, não existe serviço externo de prestação de contas de viagem a consumir.
 
 ---
 
