@@ -1,119 +1,91 @@
 package io.github.joaopbmello.contasdeviagem.presentation.viagem
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import io.github.joaopbmello.contasdeviagem.domain.Despesa
+import io.github.joaopbmello.contasdeviagem.domain.Viagem
 import io.github.joaopbmello.contasdeviagem.domain.formatarValorEmReais
+import io.github.joaopbmello.contasdeviagem.presentation.componentes.BarraDeTopo
+import io.github.joaopbmello.contasdeviagem.presentation.componentes.EstadoVazio
 
-private val EspacamentoDaLista = 16.dp
-private val EspacoEntreItens = 8.dp
-private val EspacamentoDoTotal = 16.dp
+private val espacoDaLista = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp)
+private val espacoEntreItens = 8.dp
+private val espacamentoDoTotal = 16.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViagemScreen(
-    titulo: String,
-    periodo: String,
-    despesas: List<Despesa>,
-    onDespesaClick: (Despesa) -> Unit,
+    viagem: Viagem?,
     onLancarDespesa: () -> Unit,
+    modifier: Modifier = Modifier,
+    onVoltar: (() -> Unit)? = null,
+) {
+    if (viagem == null) {
+        Scaffold(
+            modifier = modifier,
+            topBar = { BarraDeTopo(titulo = "Viagem não encontrada", onVoltar = onVoltar) },
+        ) { espacoDoScaffold ->
+            EstadoVazio(
+                titulo = "Esta viagem não existe",
+                mensagem = "Confira o endereço ou volte para a lista de viagens.",
+                modifier = Modifier.padding(espacoDoScaffold),
+            )
+        }
+    } else {
+        DetalheDaViagem(viagem = viagem, onLancarDespesa = onLancarDespesa, onVoltar = onVoltar, modifier = modifier)
+    }
+}
+
+@Composable
+private fun DetalheDaViagem(
+    viagem: Viagem,
+    onLancarDespesa: () -> Unit,
+    onVoltar: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(text = titulo)
-                        Text(
-                            text = periodo,
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                },
+            BarraDeTopo(
+                titulo = viagem.destino,
+                subtitulo = "Saída de ${viagem.saida} · ${viagem.periodo}",
+                onVoltar = onVoltar,
             )
         },
-        bottomBar = {
-            TotalDaViagem(totalEmCentavos = despesas.sumOf { it.valorEmCentavos })
-        },
+        bottomBar = { TotalDaViagem(totalEmCentavos = viagem.totalEmCentavos) },
         floatingActionButton = {
-            ExtendedFloatingActionButton(onClick = onLancarDespesa) {
-                Text(text = "Lançar despesa")
-            }
+            ExtendedFloatingActionButton(onClick = onLancarDespesa) { Text(text = "Lançar despesa") }
         },
     ) { espacoDoScaffold ->
-        if (despesas.isEmpty()) {
-            ViagemSemDespesas(modifier = Modifier.fillMaxSize().padding(espacoDoScaffold))
+        if (viagem.despesas.isEmpty()) {
+            EstadoVazio(
+                titulo = "Nenhuma despesa lançada",
+                mensagem = "Lance o primeiro gasto da viagem e o total é somado sozinho.",
+                modifier = Modifier.padding(espacoDoScaffold),
+            )
         } else {
-            ListaDeDespesas(
-                despesas = despesas,
-                onDespesaClick = onDespesaClick,
-                espacoDoScaffold = espacoDoScaffold,
-            )
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(espacoDoScaffold),
+                contentPadding = espacoDaLista,
+                verticalArrangement = Arrangement.spacedBy(espacoEntreItens),
+            ) {
+                items(items = viagem.despesas, key = { it.id }) { despesa -> DespesaItem(despesa = despesa) }
+            }
         }
-    }
-}
-
-@Composable
-private fun ListaDeDespesas(
-    despesas: List<Despesa>,
-    onDespesaClick: (Despesa) -> Unit,
-    espacoDoScaffold: PaddingValues,
-    modifier: Modifier = Modifier,
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = espacoDoScaffold,
-        verticalArrangement = Arrangement.spacedBy(EspacoEntreItens),
-    ) {
-        items(items = despesas, key = { it.id }) { despesa ->
-            DespesaItem(
-                despesa = despesa,
-                onClick = { onDespesaClick(despesa) },
-                modifier = Modifier.padding(horizontal = EspacamentoDaLista),
-            )
-        }
-    }
-}
-
-@Composable
-private fun ViagemSemDespesas(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.padding(EspacamentoDaLista),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = "Nenhuma despesa lançada nesta viagem",
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = "Lance o primeiro gasto e o total é somado sozinho.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
     }
 }
 
@@ -122,22 +94,18 @@ private fun TotalDaViagem(
     totalEmCentavos: Long,
     modifier: Modifier = Modifier,
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-    ) {
+    Surface(modifier = modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(EspacamentoDoTotal),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(espacamentoDoTotal)
+                    .semantics(mergeDescendants = true) {},
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = "Total das despesas",
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Text(
-                text = formatarValorEmReais(totalEmCentavos),
-                style = MaterialTheme.typography.titleMedium,
-            )
+            Text(text = "Total das despesas", style = MaterialTheme.typography.titleMedium)
+            Text(text = "R$ ${formatarValorEmReais(totalEmCentavos)}", style = MaterialTheme.typography.titleMedium)
         }
     }
 }
