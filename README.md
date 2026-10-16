@@ -43,3 +43,7 @@ Testado com o TalkBack no emulador. O que foi verificado:
 - Opções de comprovante lidas como botões de opção
 - Alvos de toque de pelo menos 48 dp
 - Cores só pelos papéis do tema, sem cor fixa
+
+### Vídeo
+
+https://drive.google.com/file/d/1rRtJx4mMn5j6U4KTWovo6HP-xtek0bT7/view?usp=sharing
