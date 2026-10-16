@@ -12,38 +12,35 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.joaopbmello.contasdeviagem.domain.Despesa
 import io.github.joaopbmello.contasdeviagem.domain.formatarValorEmReais
 
-private val EspacamentoInterno = 16.dp
-private val EspacoEntreTextoEValor = 12.dp
+private val espacamentoInterno = 16.dp
+private val espacoEntreTextoEValor = 12.dp
 
 @Composable
 fun DespesaItem(
     despesa: Despesa,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(modifier = modifier.fillMaxWidth().semantics(mergeDescendants = true) {}) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(EspacamentoInterno),
+            modifier = Modifier.fillMaxWidth().padding(espacamentoInterno),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
+                Text(text = despesa.descricao, style = MaterialTheme.typography.bodyLarge)
                 Text(
-                    text = despesa.descricao,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                Text(
-                    text = "${despesa.data}, ${despesa.cidade}, ${despesa.tipoComprovante.rotulo}",
+                    text = "${despesa.data} · ${despesa.cidade} · ${despesa.tipoComprovante.rotulo}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Spacer(modifier = Modifier.width(EspacoEntreTextoEValor))
+            Spacer(modifier = Modifier.width(espacoEntreTextoEValor))
             Text(
-                text = formatarValorEmReais(despesa.valorEmCentavos),
+                text = "R$ ${formatarValorEmReais(despesa.valorEmCentavos)}",
                 style = MaterialTheme.typography.bodyLarge,
             )
         }

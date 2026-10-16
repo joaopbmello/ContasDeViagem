@@ -2,9 +2,10 @@ package io.github.joaopbmello.contasdeviagem.domain
 
 enum class TipoComprovante(
     val rotulo: String,
+    val nome: String,
 ) {
-    NOTA_FISCAL("NF"),
-    RECIBO("Recibo"),
+    NOTA_FISCAL("NF", "Nota fiscal"),
+    RECIBO("Recibo", "Recibo"),
 }
 
 data class Despesa(
